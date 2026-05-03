@@ -19,45 +19,32 @@ public class AdminCategoryController {
     @Autowired
     private CategoryService categoryService;
 
-    // ==================== LIST ====================
     @GetMapping({"", "/list"})
-    public String list(Model model,
-                       @RequestParam(required = false) String keyword) {
-
-        List<Category> categories;
-
+    public String list(Model model, @RequestParam(required = false) String keyword) {
         try {
-            if (keyword != null && !keyword.isBlank()) {
-                categories = categoryService.getCategoriesByName(keyword);
-            } else {
-                categories = categoryService.getAllCategories();
-            }
+            List<Category> categories = (keyword != null && !keyword.isBlank())
+                    ? categoryService.getCategoriesByName(keyword)
+                    : categoryService.getAllCategories();
 
             model.addAttribute("categories", categories);
-
+            model.addAttribute("keyword", keyword);
         } catch (Exception e) {
             model.addAttribute("error", e.getMessage());
         }
-
-        return "admin/category";
+        return "admin/category-list";
     }
 
-    // ==================== FORM CREATE ====================
     @GetMapping("/add")
     public String showCreateForm(Model model) {
         model.addAttribute("category", new Category());
-        return "admin/category/form";
+        return "admin/category-form";
     }
 
-    // ==================== SAVE (CREATE) ====================
     @PostMapping("/save")
     public String save(@Valid @ModelAttribute("category") Category category,
                        BindingResult result,
                        RedirectAttributes redirectAttributes) {
-
-        if (result.hasErrors()) {
-            return "admin/category/form";
-        }
+        if (result.hasErrors()) return "admin/category-form";
 
         try {
             categoryService.create(category);
@@ -65,35 +52,25 @@ public class AdminCategoryController {
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", e.getMessage());
         }
-
         return "redirect:/admin/category/list";
     }
 
-    // ==================== EDIT ====================
     @GetMapping("/edit/{id}")
-    public String edit(@PathVariable("id") Long id,
-                       Model model,
-                       RedirectAttributes redirectAttributes) {
-
+    public String edit(@PathVariable Long id, Model model, RedirectAttributes redirectAttributes) {
         try {
-            Category category = categoryService.getCategoryById(id);
-            model.addAttribute("category", category);
-            return "admin/category/form"; // đúng view form
+            model.addAttribute("category", categoryService.getCategoryById(id));
+            return "admin/category-form";
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", e.getMessage());
             return "redirect:/admin/category/list";
         }
     }
 
-    // ==================== UPDATE ====================
     @PostMapping("/update")
     public String update(@Valid @ModelAttribute("category") Category category,
                          BindingResult result,
                          RedirectAttributes redirectAttributes) {
-
-        if (result.hasErrors()) {
-            return "admin/category/form";
-        }
+        if (result.hasErrors()) return "admin/category-form";
 
         try {
             categoryService.update(category);
@@ -101,32 +78,22 @@ public class AdminCategoryController {
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", e.getMessage());
         }
-
         return "redirect:/admin/category/list";
     }
 
-    // ==================== DELETE ====================
     @GetMapping("/delete/{id}")
-    public String delete(@PathVariable("id") Long id,
-                         RedirectAttributes redirectAttributes) {
-
+    public String delete(@PathVariable Long id, RedirectAttributes redirectAttributes) {
         try {
             Category category = categoryService.getCategoryById(id);
-
             if (category.getProducts() != null && !category.getProducts().isEmpty()) {
-                redirectAttributes.addFlashAttribute("error",
-                        "Danh mục vẫn còn sản phẩm, không thể xóa");
-                return "redirect:/admin/category/list";
+                redirectAttributes.addFlashAttribute("error", "Danh mục còn sản phẩm, không thể xóa");
+            } else {
+                categoryService.delete(id);
+                redirectAttributes.addFlashAttribute("success", "Xóa thành công");
             }
-
-            categoryService.delete(id);
-            redirectAttributes.addFlashAttribute("success", "Xóa thành công");
-
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", e.getMessage());
         }
-
         return "redirect:/admin/category/list";
     }
 }
-
