@@ -1,10 +1,65 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
     <title>Title</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
 <body>
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card shadow">
+                    <div class="card-header bg-success text-white">
+                        <h4 class="mb-0">Thông tin nhận hàng</h4>
+                    </div>
+                    <div class="card-body">
+                        <form th:action="@{/checkout/confirm}" method="post" th:object="${checkoutDto}">
 
+                            <div class="mb-3">
+                                <label class="form-label">Họ và tên khách hàng</label>
+                                <input type="text" th:field="*{customerName}" class="form-control" placeholder="Nhập tên của bạn">
+                                <div class="text-danger small" th:if="${#fields.hasErrors('customerName')}" th:errors="*{customerName}"></div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Địa chỉ giao hàng</label>
+                                <input type="text" th:field="*{address}" class="form-control" placeholder="Số nhà, tên đường, quận/huyện...">
+                                <div class="text-danger small" th:if="${#fields.hasErrors('address')}" th:errors="*{address}"></div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Số điện thoại liên hệ</label>
+                                <input type="text" th:field="*{phone}" class="form-control" placeholder="Số điện thoại hợp lệ">
+                                <div class="text-danger small" th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}"></div>
+                            </div>
+
+                            <hr>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <a href="/cart" class="text-decoration-none">Quay lại giỏ hàng</a>
+                                <button type="submit" class="btn btn-success px-4">Xác nhận thanh toán</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
 </body>
 </html>
