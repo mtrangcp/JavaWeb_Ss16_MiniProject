@@ -27,7 +27,7 @@ public class Order {
     private LocalDateTime orderedAt;
 
     @Column(nullable = false)
-    private Long totalAmount;
+    private Double totalAmount;
 
     @Column(nullable = false, length = 120)
     private String shippingName;
