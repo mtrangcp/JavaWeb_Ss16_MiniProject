@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Danh sách sản phẩm</title>
+    <meta charset="UTF-8">
+</head>
+<body>
+
+<h2>Danh sách sản phẩm</h2>
+
+<!-- SEARCH FORM -->
+<form method="get" th:action="@{/admin/products}">
+    Tên:
+    <input type="text" name="name" th:value="${searchDto.name}"/>
+
+    Giá từ:
+    <input type="number" name="minPrice" th:value="${searchDto.minPrice}"/>
+
+    đến:
+    <input type="number" name="maxPrice" th:value="${searchDto.maxPrice}"/>
+
+    Danh mục:
+    <select name="categoryId">
+        <option value="">--Tất cả--</option>
+        <option th:each="c : ${categories}"
+                th:value="${c.id}"
+                th:selected="${searchDto.categoryId == c.id}"
+                th:text="${c.name}">
+        </option>
+    </select>
+
+    <button type="submit">Tìm</button>
+</form>
+
+<br/>
+
+<a th:href="@{/admin/products/create}">+ Thêm sản phẩm</a>
+
+<br/><br/>
+
+<table border="1" cellpadding="5">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Tên</th>
+        <th>Giá</th>
+        <th>Tồn kho</th>
+        <th>Ảnh</th>
+        <th>Danh mục</th>
+        <th>Action</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <tr th:each="p : ${products.content}">
+        <td th:text="${p.id}"></td>
+        <td th:text="${p.name}"></td>
+        <td th:text="${p.price}"></td>
+        <td th:text="${p.stockQuantity}"></td>
+
+        <td>
+            <img th:if="${p.imageUrl != null and !#strings.startsWith(p.imageUrl, 'http')}"
+                 th:src="@{'/uploads/' + ${p.imageUrl}}"
+                 width="80"/>
+
+            <img th:if="${p.imageUrl != null and #strings.startsWith(p.imageUrl, 'http')}"
+                 th:src="${p.imageUrl}"
+                 width="80"/>
+        </td>
+
+        <td th:text="${p.category.name}"></td>
+
+        <td>
+            <a th:href="@{'/admin/products/edit/' + ${p.id}}">Sửa</a> |
+            <a th:href="@{'/admin/products/delete/' + ${p.id}}"
+               onclick="return confirm('Xóa sản phẩm này?')">Xóa</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<br/>
+
+<!-- PAGINATION -->
+<div>
+    <a th:if="${products.hasPrevious()}"
+       th:href="@{/admin/products(page=${products.number - 1},
+                                 name=${searchDto.name},
+                                 minPrice=${searchDto.minPrice},
+                                 maxPrice=${searchDto.maxPrice},
+                                 categoryId=${searchDto.categoryId})}">
+        ← Prev
+    </a>
+
+    <span>Trang <span th:text="${products.number + 1}"></span></span>
+
+    <a th:if="${products.hasNext()}"
+       th:href="@{/admin/products(page=${products.number + 1},
+                                 name=${searchDto.name},
+                                 minPrice=${searchDto.minPrice},
+                                 maxPrice=${searchDto.maxPrice},
+                                 categoryId=${searchDto.categoryId})}">
+        Next →
+    </a>
+</div>
+
+</body>
+</html>
