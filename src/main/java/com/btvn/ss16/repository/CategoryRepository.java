@@ -1,4 +1,4 @@
 package com.btvn.ss16.repository;
 
-public class CategoryRepository {
+public interface CategoryRepository {
 }

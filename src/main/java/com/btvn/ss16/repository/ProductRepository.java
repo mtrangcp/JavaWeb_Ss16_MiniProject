@@ -1,4 +1,4 @@
 package com.btvn.ss16.repository;
 
-public class ProductRepository {
+public interface ProductRepository {
 }
