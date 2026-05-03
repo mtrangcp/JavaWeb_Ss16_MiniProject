@@ -1,10 +1,83 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Category Manager</title>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 </head>
+
 <body>
 
+<div class="container mt-4">
+
+    <h2 class="mb-3">Category Manager</h2>
+
+    <div th:if="${success}" class="alert alert-success">
+        <span th:text="${success}"></span>
+    </div>
+
+    <div th:if="${error}" class="alert alert-danger">
+        <span th:text="${error}"></span>
+    </div>
+
+    <form th:action="@{/admin/category/list}" method="get" class="form-inline mb-3">
+        <input type="text" name="keyword" class="form-control mr-2"
+               placeholder="Search by name...">
+        <button type="submit" class="btn btn-primary">Search</button>
+    </form>
+
+    <div class="mb-3">
+        <a th:href="@{/admin/category/add}" class="btn btn-success">
+            + Add Category
+        </a>
+    </div>
+
+    <table class="table table-bordered table-hover">
+
+        <thead class="thead-dark">
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Description</th>
+            <th width="180px">Action</th>
+        </tr>
+        </thead>
+
+        <tbody>
+
+        <!-- Nếu không có data -->
+        <tr th:if="${#lists.isEmpty(categories)}">
+            <td colspan="4" class="text-center text-danger">
+                Danh sách trống
+            </td>
+        </tr>
+
+
+        <tr th:each="category : ${categories}">
+            <td th:text="${category.id}"></td>
+            <td th:text="${category.name}"></td>
+            <td th:text="${category.description}"></td>
+
+            <td>
+                <a th:href="@{/admin/category/edit/{id}(id=${category.id})}"
+                   class="btn btn-warning btn-sm">
+                    Edit
+                </a>
+
+                <a th:href="@{/admin/category/delete/{id}(id=${category.id})}"
+                   class="btn btn-danger btn-sm"
+                   onclick="return confirm('Bạn có chắc muốn xóa?')">
+                    Delete
+                </a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
 </body>
 </html>
