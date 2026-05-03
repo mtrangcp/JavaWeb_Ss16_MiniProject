@@ -57,7 +57,7 @@ public class ProductService {
         );
     }
 
-    // phân trang
+    // phân trang tìm kiếm
     public Page<Product> search(
             String name,
             Double minPrice,
@@ -67,11 +67,11 @@ public class ProductService {
             int size
     ) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("id").descending());
-
-        Specification<Product> spec = ProductSpecification.filter(
-                name, minPrice, maxPrice, categoryId
-        );
-
+        Specification<Product> spec = Specification.where(null);
+        spec = spec.and(ProductSpecification.hasName(name));
+        spec = spec.and(ProductSpecification.hasMinPrice(minPrice));
+        spec = spec.and(ProductSpecification.hasMaxPrice(maxPrice));
+        spec = spec.and(ProductSpecification.hasCategory(categoryId));
         return productRepository.findAll(spec, pageable);
     }
 
