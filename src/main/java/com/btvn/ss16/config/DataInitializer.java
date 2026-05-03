@@ -31,15 +31,15 @@ public class DataInitializer implements CommandLineRunner {
 
         persistProduct("Laptop Dell XPS 15", Double.valueOf("25990000"), 12,
                 "Laptop cao cấp 15 inch", electronics,
-                "https://placehold.co/400x300?text=Laptop");
+                "https://lapvip.vn/upload/products/thumb_350x0/dell-xps-16-9640-2024-1706929809.jpg");
 
         persistProduct("Tai nghe Sony WH-1000XM5", Double.valueOf("7990000"), 30,
                 "Tai nghe chống ồn", electronics,
-                "https://placehold.co/400x300?text=Headphone");
+                "https://bizweb.dktcdn.net/100/451/485/products/bose-quietcomfort-ultra-28.jpg?v=1764673266237");
 
         User demo = User.builder()
-                .fullName("Nguyễn Văn Demo")
-                .email("demo.customer@example.com")
+                .fullName("Nguyễn Văn A")
+                .email("A@example.com")
                 .phone("0901234567")
                 .address("123 Đường ABC, Quận 1, TP.HCM")
                 .build();
