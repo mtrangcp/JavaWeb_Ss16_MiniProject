@@ -9,8 +9,6 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal; // Phải import cái này
-
 @Component
 public class DataInitializer implements CommandLineRunner {
 
