@@ -1,10 +1,67 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
+<div class="admin-container">
+    <!-- Sidebar Menu -->
+    <aside class="sidebar">
+        <h2>Quản Trị</h2>
+        <nav>
+            <ul>
+                <li><a href="/admin/dashboard" class="active">Dashboard</a></li>
+                <li><a href="/admin/category">Quản lý Danh mục</a></li>
+                <li><a href="/admin/product">Quản lý Sản phẩm</a></li>
+                <li><a href="/admin/order">Quản lý Đơn hàng</a></li>
+            </ul>
+        </nav>
+    </aside>
 
+    <!-- Nội dung chính -->
+    <main class="main-content">
+        <header>
+            <h1>Thống kê & Báo cáo</h1>
+        </header>
+
+        <div class="stats-cards">
+            <div class="card revenue-card">
+                <h3>Tổng Doanh Thu Hệ Thống</h3>
+                <p class="amount" th:text="${#numbers.formatDecimal(totalRevenue, 0, 'COMMA', 0, 'POINT')} + ' VNĐ'">0 VNĐ</p>
+            </div>
+        </div>
+
+        <div class="table-container">
+            <h3>Top 5 Sản phẩm bán chạy nhất</h3>
+            <table class="styled-table">
+                <thead>
+                <tr>
+                    <th>STT</th>
+                    <th>Tên sản phẩm</th>
+                    <th>Số lượng đã bán</th>
+                    <th>Doanh thu sinh ra</th>
+                </tr>
+                </thead>
+                <tbody>
+                <!-- Truy cập vào Map thông qua key -->
+                <tr th:each="prod, iterStat : ${topProducts}">
+                    <td th:text="${iterStat.count}">1</td>
+                    <td th:text="${prod['productName']}">Tên SP</td>
+                    <td th:text="${prod['totalSold']}">10</td>
+                    <td class="price-col" th:text="${#numbers.formatDecimal(prod['totalRevenue'], 0, 'COMMA', 0, 'POINT')} + ' đ'">100,000 đ</td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(topProducts)}">
+                    <td colspan="4" class="text-center">Chưa có dữ liệu thống kê đơn hàng.</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+</div>
+
+<script th:src="@{/js/main.js}"></script>
 </body>
 </html>
